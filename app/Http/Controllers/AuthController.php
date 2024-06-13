@@ -16,6 +16,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'email' => 'required|email',
+            'role' => 'sometimes|string',
             'password' => 'required',
         ]);
 
@@ -29,13 +30,13 @@ class AuthController extends Controller
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
-        $success['token'] =  $user->createToken('token')->plainTextToken;
 
         return response()->json([
             'status' => 'success',
             'message' => 'User registered successfully',
             'name' => $user->name,
-            'token' => $success['token'],
+            'email' => $user->email,
+            'role' => $user->role,
         ]);
     }
 
@@ -43,18 +44,24 @@ class AuthController extends Controller
     {
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
-            $success['token'] = $user->createToken('token')->plainTextToken;
+            $success['token'] =  $user->createToken('basic-token',['none'])->plainTextToken;
+            $success['role'] = 'Basic Branch';
+
+            if ($user->isSuperAdmin()) {
+                $success['token'] = $user->createToken('super-admin-token', ['create', 'update', 'destroy'])->plainTextToken;
+                $success['role'] = 'Super Admin';
+            }
 
             return response()->json([
                 'status' => 'success',
                 'message' => 'User logged in successfully',
                 'token' => $success['token'],
+                'role' =>  $success['role'],
             ]);
-        } else {
+        }
             return response()->json([
                 'status' => 'error',
                 'message' => 'invalid credentials'
             ]);
-        }
     }
 }
