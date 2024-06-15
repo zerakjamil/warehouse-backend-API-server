@@ -13,7 +13,11 @@ return new class extends Migration
     {
         Schema::create('branches', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('name');
+            $table->string('profile_logo');
+            $table->string('address');
+            $table->timestamp('created_at');
+            $table->foreignId('warehouse_id')->constrained('warehouses')->references('id')->onDelete('cascade');
         });
     }
 

@@ -13,7 +13,13 @@ return new class extends Migration
     {
         Schema::create('devices', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string('serial_number');
+            $table->string('mac_address');
+            $table->string('box_number');
+            $table->timestamp('registered_at');
+            $table->timestamp('sold_at')->nullable();
+            $table->foreignId('branch_id')->constrained('branches')->references('id')->onDelete('cascade');
+            $table->foreignId('warehouse_id')->constrained('warehouses')->references('id')->onDelete('cascade');
         });
     }
 

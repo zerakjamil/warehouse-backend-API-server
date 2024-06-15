@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API\V1;
 
-use App\Models\User;
+use App\Http\Controllers\Controller;
+use App\Models\V1\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -45,7 +45,7 @@ class AuthController extends Controller
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
             $success['token'] =  $user->createToken('basic-token',['none'])->plainTextToken;
-            $success['role'] = 'Basic Branch';
+            $success['role'] = 'Basic StoreBranchRequest';
 
             if ($user->isSuperAdmin()) {
                 $success['token'] = $user->createToken('super-admin-token', ['create', 'update', 'destroy'])->plainTextToken;

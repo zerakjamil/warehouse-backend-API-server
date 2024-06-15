@@ -1,24 +1,27 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserController;
-use App\Http\Middleware\SuperAdmin;
+use App\Http\Controllers\API\V1\AuthController;
+use App\Http\Controllers\API\V1\BranchController;
+use App\Http\Controllers\API\V1\DeviceController;
+use App\Http\Controllers\API\V1\UserController;
+use App\Http\Controllers\API\V1\WarehouseController;
 use Illuminate\Support\Facades\Route;
 
-Route::post('/register',[AuthController::class,'register']);
-Route::post('/login',[AuthController::class,'login']);
-Route::post('/token/create', [AuthController::class,'createToken']);
+Route::prefix('v1')->group(function (){
+    Route::post('/register',[AuthController::class,'register']);
+    Route::post('/login',[AuthController::class,'login']);
 
 
-Route::middleware('auth:sanctum')->group(function () {
+    Route::middleware('auth:sanctum')->group(function () {
 
-    //Protected Area
+        Route::get('/user', [UserController::class,'getUserInfo']);
+        Route::apiResource('/warehouses', WarehouseController::class);
+        Route::apiResource('/branches', BranchController::class);
+        Route::get('/warehouses/{warehouse}/branches', [WarehouseController::class,'showBranches']);
+        Route::get('/warehouses/{warehouse}/devices', [WarehouseController::class,'showDevices']);
+        Route::get('/devices/search', [DeviceController::class,'search']);
 
-    Route::get('/user', [UserController::class,'getUserInfo'])->middleware([SuperAdmin::class]);
 
-//    Route::apiResource('warehouses', WarehouseController::class)
-//        ->middleware('can:superadmin');
-//
 //    Route::get('branches/{branch}', [BranchController::class, 'show']);
 //    Route::apiResource('warehouses.branches', BranchController::class)->only('index');
 //    Route::apiResource('warehouses.devices', DeviceController::class)->only('index');
@@ -26,4 +29,6 @@ Route::middleware('auth:sanctum')->group(function () {
 //    Route::get('devices/search', [DeviceController::class, 'search'])->name('devices.search');
 //    Route::get('devices/{device}/status', [DeviceController::class, 'getStatus'])->name('devices.status');
 
+    });
 });
+

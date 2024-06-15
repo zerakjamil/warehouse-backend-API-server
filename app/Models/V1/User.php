@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\V1;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -51,4 +51,7 @@ class User extends Authenticatable
     {
         return $this->role === 'superAdmin';
     }
+
+    //Log::channel('custom_logs')->info('Action One performed.');
+    //Log::channel('custom_logs')->info('Action Two performed.');
 }
