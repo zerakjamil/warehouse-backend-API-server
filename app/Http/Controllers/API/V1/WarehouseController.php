@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API\V1;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\V1\BranchResource;
 use App\Http\Resources\V1\DeviceResource;
-use App\Http\Resources\V1\WarehouseCollection;
 use App\Http\Resources\V1\WarehouseResource;
 use App\Models\V1\Branch;
 use App\Models\V1\Device;
