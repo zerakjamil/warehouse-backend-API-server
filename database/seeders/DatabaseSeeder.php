@@ -19,6 +19,6 @@ class DatabaseSeeder extends Seeder
     {
         Warehouse::factory(10)->create();
         Branch::factory(100)->create();
-        Device::factory(1000)->create();
+        Device::factory(3000)->create();
     }
 }
