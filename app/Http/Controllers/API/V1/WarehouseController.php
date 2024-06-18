@@ -9,7 +9,7 @@ use App\Http\Resources\V1\WarehouseResource;
 use App\Models\V1\Branch;
 use App\Models\V1\Device;
 use App\Models\V1\Warehouse;
-
+use Illuminate\Http\Request;
 class WarehouseController extends Controller
 {
     public function index()
@@ -17,6 +17,16 @@ class WarehouseController extends Controller
         $warehouses = Warehouse::with('branches')->paginate();
 
         return WarehouseResource::collection($warehouses);
+    }
+
+    public function show(Request $request,Warehouse $warehouse)
+    {
+        $includeBranches = $request->query('includeBranches');
+
+        if ($includeBranches){
+            return new WarehouseResource($warehouse->loadMissing('branches'));
+        }
+        return new WarehouseResource($warehouse);
     }
 
     public function showBranches(Warehouse $warehouse)
