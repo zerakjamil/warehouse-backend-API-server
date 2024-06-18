@@ -48,9 +48,9 @@ class DeviceController extends Controller
         return response()->download($filePath, $filename, ['Content-Type' => 'text/csv']);
     }
 
-    public function import(Request $request)
+    public function import()
     {
-        $filePath = 'C:\laragon\www\hr\storage\devices.csv';
+        $filePath = storage_path('app/public/devices.csv'); // Updated the file path
 
         if (!file_exists($filePath)) {
             return response()->json(['message' => 'File not found'], 404);
@@ -61,4 +61,5 @@ class DeviceController extends Controller
 
         return response()->json(['message' => 'Import job dispatched'], 200);
     }
+
 }
