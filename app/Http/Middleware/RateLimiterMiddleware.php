@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\RateLimiter;
 
 class RateLimiterMiddleware
 {
@@ -18,15 +19,16 @@ class RateLimiterMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         $user = Auth::user();
-        $key = 'rate_limit:' . $user->id;
-        $attempts = Cache::get($key, 0);
-        if ($attempts >= 10){
+
+        if (RateLimiter::tooManyAttempts('send-message:'.$user->id, 10)) {
+            $time = RateLimiter::availableIn('send-message:'.$user->id);
             return response()->json([
                 'status' => 'error',
-                'message' => 'too many attempts please try again later!'
+                'message' => 'Too many attempts, You may try again in '.$time.' seconds.'
             ]);
         }
-        Cache::put($key, $attempts + 1, now()->addMinutes(60));
+
+        RateLimiter::increment('send-message:'.$user->id,3600);
 
         return $next($request);
     }
