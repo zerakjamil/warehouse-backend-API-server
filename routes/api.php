@@ -19,6 +19,7 @@ Route::prefix('v1')->group(function (){
         Route::get('/warehouses/{warehouse}/devices', [WarehouseController::class,'showDevices']);
         Route::get('/devices/search', [DeviceController::class,'search']);
         Route::get('/devices/export', [DeviceController::class,'export']);
+        Route::patch('devices/{device}/assign', [DeviceController::class,'assignToWarehouse']);
         Route::post('/devices/import', [DeviceController::class, 'import']);
     });
 });

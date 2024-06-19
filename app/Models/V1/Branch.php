@@ -14,7 +14,8 @@ class Branch extends Model
         'name',
         'profile_logo',
         'address',
-        'warehouse_id'
+        'warehouse_id',
+        'created_at'
     ];
     public $timestamps = false;
     public function warehouse(): BelongsTo

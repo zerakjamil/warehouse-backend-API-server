@@ -30,6 +30,7 @@ class BranchResource extends JsonResource
         'createdAt' => $this->created_at,
         'remainingDevices' => count($remaining),
         'soldDevices' => count($sold),
+        'devices' => DeviceResource::collection($this->whenLoaded('devices')),
         ];
     }
 }

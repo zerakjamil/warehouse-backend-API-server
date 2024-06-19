@@ -13,6 +13,7 @@ class Device extends Model
 
     protected $fillable = [
         'serial_number',
+        'warehouse_id',
         'mac_address',
         'branch_id',
         'sold_at',

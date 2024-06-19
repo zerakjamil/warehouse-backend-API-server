@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\UpdateDeviceRequest;
 use App\Http\Resources\V1\DeviceResource;
 use App\Jobs\ImportDevicesJob;
 use App\Models\V1\Device;
+use App\Models\V1\Warehouse;
 use Illuminate\Http\Request;
 
 
@@ -62,4 +64,18 @@ class DeviceController extends Controller
         return response()->json(['message' => 'Import job dispatched'], 200);
     }
 
+    public function assignToWarehouse(UpdateDeviceRequest $request,Device $device)
+    {
+        $warehouse = Warehouse::find($request->warehouseId);
+        if ($warehouse){
+            $device->update([
+                'warehouse_id' => $request->warehouseId
+            ]);
+            return new DeviceResource($device);
+        }
+        return response()->json([
+            'status' => 'error',
+            'message' => 'warehouse not found'
+        ]);
+    }
 }

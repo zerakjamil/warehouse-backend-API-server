@@ -5,14 +5,17 @@ namespace App\Http\Requests\V1;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class StoreBranchRequest extends FormRequest
+class UpdateDeviceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-            return true;
+        if (!Auth::user()->isSuperAdmin()){
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -23,18 +26,16 @@ class StoreBranchRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required','string','max:255'],
-            'profileLogo' => ['required','string'],
-            'address' => ['required','string'],
-            'warehouse_id' => ['required','integer'],
+            'warehouseId' => 'required',
         ];
     }
 
     public function prepareForValidation()
     {
-        $this->merge([
-            'profile_logo' => $this->profileLogo,
-            'warehouse_id' => $this->warehouseId,
-        ]);
+        if ($this->warehouseId){
+            $this->merge([
+                'warehouse_id' => $this->warehouseId,
+            ]);
+        }
     }
 }

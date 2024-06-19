@@ -18,17 +18,17 @@ class RateLimiterMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $user = Auth::user();
-
-        if (RateLimiter::tooManyAttempts('send-message:'.$user->id, 10)) {
-            $time = RateLimiter::availableIn('send-message:'.$user->id);
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Too many attempts, You may try again in '.$time.' seconds.'
-            ]);
-        }
-
-        RateLimiter::increment('send-message:'.$user->id,3600);
+//        $user = Auth::user();
+//
+//        if (RateLimiter::tooManyAttempts('send-message:'.$user->id, 10)) {
+//            $time = RateLimiter::availableIn('send-message:'.$user->id);
+//            return response()->json([
+//                'status' => 'error',
+//                'message' => 'Too many attempts, You may try again in '.$time.' seconds.'
+//            ]);
+//        }
+//
+//        RateLimiter::increment('send-message:'.$user->id,3600);
 
         return $next($request);
     }
