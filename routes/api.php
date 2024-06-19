@@ -11,7 +11,7 @@ Route::prefix('v1')->group(function (){
     Route::post('/register',[AuthController::class,'register']);
     Route::post('/login',[AuthController::class,'login']);
 
-    Route::middleware(['auth:sanctum','super-admin'])->group(function () {
+    Route::middleware(['auth:sanctum','super-admin','rate-limiter'])->group(function () {
         Route::get('/user', [UserController::class,'getUserInfo']);
         Route::apiResource('/warehouses', WarehouseController::class);
         Route::apiResource('/branches', BranchController::class);

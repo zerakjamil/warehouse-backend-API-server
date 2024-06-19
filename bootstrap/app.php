@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\RateLimiterMiddleware;
 use App\Http\Middleware\SuperAdminMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -14,7 +15,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
-           'super-admin' => SuperAdminMiddleware::class
+           'super-admin' => SuperAdminMiddleware::class,
+            'rate-limiter' => RateLimiterMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
