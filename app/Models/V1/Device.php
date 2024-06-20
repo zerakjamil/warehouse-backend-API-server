@@ -12,11 +12,14 @@ class Device extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'id',
         'serial_number',
         'mac_address',
         'branch_id',
         'sold_at',
-        'box-number'
+        'registered_at',
+        'box_number',
+        'warehouse_id'
     ];
 
     public function branch():BelongsTo

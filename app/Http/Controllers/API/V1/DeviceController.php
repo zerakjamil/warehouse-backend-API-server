@@ -29,7 +29,7 @@ class DeviceController extends Controller
 
         $file = fopen($filePath, 'w');
 
-        fputcsv($file, ['ID', 'Serial Number', 'MAC Address', 'Branch ID', 'Registered At', 'Sold At', 'Box Number']);
+        fputcsv($file, ['ID', 'Serial Number', 'MAC Address', 'Branch ID', 'Registered At', 'Sold At', 'Box Number','Warehouse ID']);
 
         foreach ($devices as $device) {
             fputcsv($file, [
@@ -40,6 +40,7 @@ class DeviceController extends Controller
                 $device->registered_at,
                 $device->sold_at,
                 $device->box_number,
+                $device->warehouse_id
             ]);
         }
 
@@ -56,7 +57,6 @@ class DeviceController extends Controller
             return response()->json(['message' => 'File not found'], 404);
         }
 
-        // Dispatch the job to import devices
         ImportDevicesJob::dispatch($filePath)->onQueue('imports');
 
         return response()->json(['message' => 'Import job dispatched'], 200);
