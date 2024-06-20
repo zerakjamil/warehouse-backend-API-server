@@ -28,7 +28,7 @@ class RateLimiterMiddleware
             ]);
         }
 
-        RateLimiter::increment('send-message:'.$user->id,3600);
+        RateLimiter::increment('send-message:'.$user->id,60);
 
         return $next($request);
     }
