@@ -3,17 +3,59 @@
 namespace App\Http\Controllers\API\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\V1\StoreDeviceRequest;
 use App\Http\Requests\V1\UpdateDeviceRequest;
 use App\Http\Resources\V1\DeviceResource;
 use App\Jobs\ImportDevicesJob;
 use App\Models\V1\Device;
 use App\Models\V1\Warehouse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 
 class DeviceController extends Controller
 {
+    public function index()
+    {
+        $devices = Device::all();
 
+        Log::channel('action_logs')->info('SuperAdmin '. Auth::user()->name .' indexed all available devices');
+
+        return DeviceResource::collection($devices);
+    }
+
+    public function show(Device $device)
+    {
+        Log::channel('action_logs')->info('SuperAdmin '. Auth::user()->name .' read a device under id: ' .$device->id);
+        return new DeviceResource($device);
+    }
+
+    public function update(UpdateDeviceRequest $request,Device $device)
+    {
+        $device->update($request->all());
+        Log::channel('action_logs')->info('SuperAdmin '. Auth::user()->name .' updated a device under id: ' .$device->id);
+        return new DeviceResource($device);
+    }
+
+    public function store(StoreDeviceRequest $request)
+    {
+        $device = Device::create($request->all());
+        Log::channel('action_logs')->info('SuperAdmin '. Auth::user()->name .' created a device');
+        return new DeviceResource($device);
+    }
+
+    public function destroy(Device $device)
+    {
+        $device->delete();
+
+        Log::channel('action_logs')->info('SuperAdmin '. Auth::user()->name .' deleted a device');
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Device deleted successfully'
+        ]);
+    }
     public function search(Request $request)
     {
         $query = $request->input('q');
@@ -58,7 +100,6 @@ class DeviceController extends Controller
             return response()->json(['message' => 'File not found'], 404);
         }
 
-        // Dispatch the job to import devices
         ImportDevicesJob::dispatch($filePath)->onQueue('imports');
 
         return response()->json(['message' => 'Import job dispatched'], 200);

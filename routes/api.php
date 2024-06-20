@@ -12,15 +12,24 @@ Route::prefix('v1')->group(function (){
     Route::post('/login',[AuthController::class,'login']);
 
     Route::middleware(['auth:sanctum','super-admin','rate-limiter'])->group(function () {
+
         Route::get('/user', [UserController::class,'getUserInfo']);
-        Route::apiResource('/warehouses', WarehouseController::class);
+
         Route::apiResource('/branches', BranchController::class);
-        Route::get('/warehouses/{warehouse}/branches', [WarehouseController::class,'showBranches']);
-        Route::get('/warehouses/{warehouse}/devices', [WarehouseController::class,'showDevices']);
-        Route::get('/devices/search', [DeviceController::class,'search']);
-        Route::get('/devices/export', [DeviceController::class,'export']);
-        Route::patch('devices/{device}/assign', [DeviceController::class,'assignToWarehouse']);
-        Route::post('/devices/import', [DeviceController::class, 'import']);
+        Route::apiResource('/devices', DeviceController::class);
+        Route::apiResource('/warehouses', WarehouseController::class);
+
+        Route::prefix('/warehouses')->group(function (){
+            Route::get('{warehouse}/branches', [WarehouseController::class,'showBranches']);
+            Route::get('{warehouse}/devices', [WarehouseController::class,'showDevices']);
+        });
+
+        Route::prefix('/devices')->group(function (){
+            Route::get('search', [DeviceController::class,'search']);
+            Route::get('export', [DeviceController::class,'export']);
+            Route::patch('{device}/assign', [DeviceController::class,'assignToWarehouse']);
+            Route::post('import', [DeviceController::class, 'import']);
+        });
     });
 });
 

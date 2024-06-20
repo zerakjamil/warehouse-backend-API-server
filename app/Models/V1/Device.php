@@ -17,7 +17,8 @@ class Device extends Model
         'mac_address',
         'branch_id',
         'sold_at',
-        'box-number'
+        'registered_at',
+        'box_number'
     ];
 
     public function branch():BelongsTo

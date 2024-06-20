@@ -26,9 +26,28 @@ class StoreDeviceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'serial_number' => ['required','string','unique:devices,serial_number','max:10'],
-            'mac_address' => ['required','string','unique:devices,mac_address','regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/'],
-            'box_number' => ['required','string','unique:devices,box_number','regex:/^BOX-\d{5}$/'],
+            'serialNumber' => ['required','string','unique:devices,serial_number','max:10'],
+            'macAddress' => ['required','string','unique:devices,mac_address','regex:/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/'],
+            'boxNumber' => ['required','string','unique:devices,box_number','regex:/^BOX-\d{5}$/'],
+            'branchId' => ['required'],
+            'registeredAt' => ['required','date'],
+            'soldDate' => ['sometimes','required'],
+            'warehouseId' => ['required'],
         ];
+    }
+
+    public function prepareForValidation()
+    {
+        if ($this->warehouseId){
+            $this->merge([
+                'warehouse_id' => $this->warehouseId,
+                'mac_address' => $this->macAddress,
+                'sold_date' => $this->soldDate,
+                'serial_number' => $this->serialNumber,
+                'branch_id' => $this->branchId,
+                'registered_at' => $this->registeredAt,
+                'box_number' => $this->boxNumber,
+            ]);
+        }
     }
 }

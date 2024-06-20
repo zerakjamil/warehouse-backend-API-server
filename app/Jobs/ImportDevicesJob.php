@@ -34,7 +34,6 @@ Log::error("Could not open file: " . $this->filePath);
 return;
 }
 
-// Skip the header row
 fgetcsv($handle);
 
     while (($data = fgetcsv($handle, 1001, ',')) !== false) {
@@ -48,13 +47,12 @@ fgetcsv($handle);
             'mac_address' => $data[2],
             'branch_id' => (int)$data[3],
             'registered_at' => $data[4],
-            'sold_at' => $data[5] ?: null, // Set to null if the value is empty
+            'sold_at' => $data[5] ?: null,
             'box_number' => $data[6],
         ]);
     }
 fclose($handle);
 
-// Delete the file after processing
 unlink($this->filePath);
     } catch (\Exception $e) {
     Log::error("Error importing devices from file: " . $e->getMessage());
