@@ -1,65 +1,150 @@
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+Based on the provided PDF, here is a comprehensive README file for your GitHub repository:
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+---
 
-## About Laravel
+# Warehouse Management API
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This repository contains a simple Warehouse management API built using Laravel v11 and PHP v8.3.1 The API supports basic functionalities like CRUD operations on warehouses and branches, device management, and more, with a focus on scalability, security, and efficiency.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Table of Contents
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Running the Application](#running-the-application)
+- [API Endpoints](#api-endpoints)
+- [Logging](#logging)
+- [Validation](#validation)
+- [Error Handling](#error-handling)
+- [Testing](#testing)
+- [Dependencies](#dependencies)
+- [Best Practices](#best-practices)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Installation
 
-## Learning Laravel
+1. **Clone the repository:**
+    ```bash
+    git clone https://github.com/zerakjamil/warehouse-backend-API-server.git
+    ```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+2. **Navigate to the project directory:**
+    ```bash
+    cd warehouse-backend-API-server
+    ```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+3. **Install the dependencies:**
+    ```bash
+    composer install
+    ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+4. **Set up the environment file:**
+    ```bash
+    cp .env.example .env
+    ```
 
-## Laravel Sponsors
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+5. **Configure the database in the `.env` file:**
 
-### Premium Partners
+    Update the following lines with your database credentials:
+    ```
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=your_database
+    DB_USERNAME=your_username
+    DB_PASSWORD=your_password
+    ```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+6. **Run the database migrations:**
+    ```bash
+    php artisan migrate:fresh --seed
+    ```
 
-## Contributing
+## Configuration
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Ensure you have the following configurations in your `.env` file:
 
-## Code of Conduct
+- **Mail Configuration:** For sending emails to the super admin.
+- **Queue Configuration:** For handling background jobs (e.g., importing devices from a CSV file).
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Running the Application
 
-## Security Vulnerabilities
+Start the Laravel development server:
+```bash
+php artisan serve
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Your API will be accessible at `http://localhost:8000`.
+
+## API Endpoints
+
+### Branches
+- **GET /branches/{id}**
+    - Returns details of a specific branch including name, profile logo, address, date of creation, remaining devices, and sold devices.
+
+### Warehouses
+- **GET /warehouse/{id}/branches**
+    - Returns all branches related to a specific warehouse.
+- **GET /warehouse/{id}/devices**
+    - Returns a list of all devices that belong to a specific warehouse.
+
+### Devices
+- **GET /devices/search?q={query}**
+    - Searches and returns devices by serial number or MAC address.
+- **GET /devices/export**
+    - Exports all devices to a CSV file.
+- **POST /devices/import**
+    - Imports devices from a CSV file .
+
+### Custom Commands
+- **Export Database:**
+    ```bash
+    php artisan db:export
+    ```
+- **Export Devices to JSON:**
+    ```bash
+    php artisan devices:export-json
+    ```
+
+## Logging
+
+All actions are logged in both the database and a log file, capturing who performed the action and when it occurred, along with other relevant details stored in actions.log file.
+
+## Validation
+
+All inputs are fully validated to ensure data integrity and security.
+
+## Error Handling
+
+The API uses structured error handling to provide meaningful error messages and status codes.
+
+
+## Dependencies
+
+- PHP v8.3.1
+- Laravel v11
+- MySQL v8.4.0
+- Composer v2.7.6
+
+## Best Practices
+
+- **Problem-solving:** Efficient and simple solutions.
+- **Code style:** Readable and maintainable code.
+- **Security:** Secure coding practices.
+- **Scalability:** Designed to scale efficiently.
+- **Design patterns:** Use of appropriate design patterns.
+- **Code reusability:** Following the DRY principle.
+- **Efficiency:** Optimized for performance.
+
+## Documentation
+
+Postman collection : https://api.postman.com/collections/28087875-71ac9f57-71fd-4af1-ab5a-6e52a11b375a?access_key=PMAT-01J0TH612SVJQSFR6MWCP1B8PN
+
+## Notes
+
+- The system is ready for production use.
+- Ensure to adhere to the rate limit of 10 requests per minute per user.
+
+---
 
 ## License
 
