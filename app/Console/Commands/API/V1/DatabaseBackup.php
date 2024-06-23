@@ -46,9 +46,7 @@ public function handle()
 {
 
     if (! Storage::exists('backup')) {
-
         Storage::makeDirectory('backup');
-
     }
 
     $fileName = 'backup-' . date('Y-m-d_H-i-s') . '.sql';

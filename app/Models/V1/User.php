@@ -51,7 +51,4 @@ class User extends Authenticatable
     {
         return $this->role === 'superAdmin';
     }
-
-    //Log::channel('custom_logs')->info('Action One performed.');
-    //Log::channel('custom_logs')->info('Action Two performed.');
 }
