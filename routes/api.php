@@ -5,9 +5,12 @@ use App\Http\Controllers\API\V1\BranchController;
 use App\Http\Controllers\API\V1\DeviceController;
 use App\Http\Controllers\API\V1\UserController;
 use App\Http\Controllers\API\V1\WarehouseController;
+use App\Notifications\DeviceUpdatedNotification;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function (){
+
     Route::post('/register',[AuthController::class,'register']);
     Route::post('/login',[AuthController::class,'login']);
 
