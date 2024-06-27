@@ -12,10 +12,7 @@ class StoreDeviceRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if (Auth::user() && Auth::user()->isSuperAdmin()){
-            return true;
-        }
-        return false;
+        return true;
     }
 
     /**

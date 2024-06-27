@@ -12,9 +12,6 @@ class StoreBranchRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        if (!Auth::user()->isSuperAdmin()){
-            return false;
-        }
             return true;
     }
 

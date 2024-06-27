@@ -12,11 +12,7 @@ class StoreWarehouseRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        $this->dd(Auth::user() && Auth::user()->isSuperAdmin());
-        if (Auth::user() && Auth::user()->isSuperAdmin()){
             return true;
-        }
-            return false;
     }
 
     /**
